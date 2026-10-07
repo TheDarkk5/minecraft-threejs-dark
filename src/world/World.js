@@ -11,6 +11,10 @@ export class World {
 
         this.chunks = new Map();
 
+this.renderDistance = 3;
+
+this.lastPlayerChunkX = null;
+this.lastPlayerChunkZ = null;
 
 this.seed =
     "mon-premier-monde";
@@ -445,6 +449,139 @@ addBlock(
         z,
         blockId
     );
+
+}
+
+update(playerPosition) {
+
+    // Chunk dans lequel se trouve le joueur
+    const playerChunkX =
+        Math.floor(
+            playerPosition.x /
+            Chunk.SIZE
+        );
+
+    const playerChunkZ =
+        Math.floor(
+            playerPosition.z /
+            Chunk.SIZE
+        );
+
+
+    // Le joueur est toujours dans le même chunk
+    // donc inutile de recalculer
+    if (
+        playerChunkX === this.lastPlayerChunkX &&
+        playerChunkZ === this.lastPlayerChunkZ
+    ) {
+        return;
+    }
+
+
+    this.lastPlayerChunkX =
+        playerChunkX;
+
+    this.lastPlayerChunkZ =
+        playerChunkZ;
+
+
+    console.log(
+        `Chunk joueur : ${playerChunkX}, ${playerChunkZ}`
+    );
+
+
+    this.loadChunksAroundPlayer(
+        playerChunkX,
+        playerChunkZ
+    );
+
+}
+
+loadChunksAroundPlayer(
+    centerChunkX,
+    centerChunkZ
+) {
+
+    for (
+        let x = -this.renderDistance;
+        x <= this.renderDistance;
+        x++
+    ) {
+
+        for (
+            let z = -this.renderDistance;
+            z <= this.renderDistance;
+            z++
+        ) {
+
+            const chunkX =
+                centerChunkX + x;
+
+            const chunkZ =
+                centerChunkZ + z;
+
+
+            const key =
+                this.getChunkKey(
+                    chunkX,
+                    chunkZ
+                );
+
+
+            // Chunk déjà présent
+            if (
+                this.chunks.has(key)
+            ) {
+                continue;
+            }
+
+
+            this.createChunk(
+                chunkX,
+                chunkZ
+            );
+
+        }
+
+    }
+
+
+    // Maintenant que tous les chunks existent,
+    // on construit les meshes manquants.
+
+    for (
+        let x = -this.renderDistance;
+        x <= this.renderDistance;
+        x++
+    ) {
+
+        for (
+            let z = -this.renderDistance;
+            z <= this.renderDistance;
+            z++
+        ) {
+
+            const chunk =
+                this.chunks.get(
+                    this.getChunkKey(
+                        centerChunkX + x,
+                        centerChunkZ + z
+                    )
+                );
+
+
+            if (
+                chunk &&
+                !chunk.mesh
+            ) {
+
+                chunk.buildMesh();
+
+            }
+
+        }
+
+    }
 
 }
 

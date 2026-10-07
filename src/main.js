@@ -171,6 +171,9 @@ function animate() {
         deltaTime
     );
 
+    world.update(
+        camera.position
+    );  
 
     blockInteraction.update();
 
