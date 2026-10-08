@@ -172,11 +172,6 @@ const playButton =
         "play-button"
     );
 
-const optionsButton =
-    document.getElementById(
-        "options-button"
-    );
-
 const quitButton =
     document.getElementById(
         "quit-button"
@@ -232,81 +227,6 @@ quitButton.addEventListener(
         alert(
             "Vous pouvez fermer l'onglet."
         );
-
-    }
-);
-
-// ==========================================
-// HOTBAR
-// ==========================================
-
-let selectedSlot = 0;
-
-const hotbarSlots =
-    document.querySelectorAll(
-        ".hotbar-slot"
-    );
-
-
-function selectSlot(index) {
-
-    if (
-        index < 0 ||
-        index >= hotbarSlots.length
-    ) {
-        return;
-    }
-
-
-    hotbarSlots[
-        selectedSlot
-    ].classList.remove(
-        "selected"
-    );
-
-
-    selectedSlot = index;
-
-
-    hotbarSlots[
-        selectedSlot
-    ].classList.add(
-        "selected"
-    );
-
-}
-
-window.addEventListener(
-    "keydown",
-    (event) => {
-
-        if (
-            event.code.startsWith(
-                "Digit"
-            )
-        ) {
-
-            const number =
-                Number(
-                    event.code.replace(
-                        "Digit",
-                        ""
-                    )
-                );
-
-
-            if (
-                number >= 1 &&
-                number <= 9
-            ) {
-
-                selectSlot(
-                    number - 1
-                );
-
-            }
-
-        }
 
     }
 );
