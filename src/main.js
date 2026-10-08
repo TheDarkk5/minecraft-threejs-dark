@@ -291,9 +291,7 @@ function animate() {
             0.1
         );
 
-if (gameStarted && !inventory.isOpen  &&
-    player.controls.isLocked) {
-
+if (gameStarted && !inventory.isOpen && player.controls.isLocked) {
     player.update(deltaTime);
     blockInteraction.update();
 }
