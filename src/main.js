@@ -155,8 +155,7 @@ const blockInteraction = new BlockInteraction(
         hotbar
 );
 
-const clock = new THREE.Timer();
-
+const clock = new THREE.Clock();
 
 // ==========================================
 // MENU PRINCIPAL
