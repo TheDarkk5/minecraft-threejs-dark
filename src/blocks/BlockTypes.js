@@ -25,6 +25,13 @@ export const BLOCK = {
         name: "Pierre",
         material: "STONE",
         solid: true
-    }
+    },
 
+    OAK_LOG: {
+        id: 4,
+        name: "Bois",
+        material: "OAK_LOG",
+        solid: true
+    }
+    
 };

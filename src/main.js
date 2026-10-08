@@ -202,6 +202,8 @@ playButton.addEventListener("click", () => {
         gameStarted = true;
 
         mainMenu.style.display = "none";
+        optionsMenu.style.display = "none";
+
         hud.style.display = "block";
         crosshair.style.display = "block";
         instructions.style.display = "block";
@@ -261,6 +263,31 @@ renderDistanceSlider.addEventListener("input", (event) => {
     world.setRenderDistance(distance);
 
     localStorage.setItem("renderDistance", String(distance));
+});
+
+function openMainMenu() {
+    gameStarted = false;
+
+    mainMenu.style.display = "flex";
+    hud.style.display = "none";
+    crosshair.style.display = "none";
+    instructions.style.display = "none";
+
+    if (player.controls.isLocked) {
+        player.controls.unlock();
+    }
+}
+
+document.addEventListener("keydown", (event) => {
+    if (event.code === "Escape" && gameStarted) {
+        openMainMenu();
+    }
+});
+
+player.controls.addEventListener("unlock", () => {
+    if (gameStarted && !inventory.isOpen) {
+        openMainMenu();
+    }
 });
 
 // ==========================================

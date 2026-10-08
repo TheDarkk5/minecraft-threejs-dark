@@ -37,6 +37,13 @@ const stone = loadTexture(
     "/textures/stone.png"
 );
 
+const oakTop = loadTexture(
+    "/textures/oak_log_top.png"
+);
+
+const oakSide = loadTexture(
+    "/textures/oak_log.png"
+);
 
 // ================================
 // MATERIALS
@@ -62,7 +69,15 @@ const stoneMaterial =
         map: stone
     });
 
+const oakTopMaterial =
+    new THREE.MeshLambertMaterial({
+        map: oakTop
+    });
 
+const oakSideMaterial =
+    new THREE.MeshLambertMaterial({
+        map: oakSide
+    });
 // ================================
 // BLOCS
 // ================================
@@ -93,6 +108,28 @@ export const BLOCK_MATERIALS = {
 
     DIRT: dirtMaterial,
 
-    STONE: stoneMaterial
+    STONE: stoneMaterial,
+
+ OAK_LOG: [
+
+        // droite
+        oakSideMaterial,
+
+        // gauche
+        oakSideMaterial,
+
+        // dessus
+        oakTopMaterial,
+
+        // dessous
+        oakTopMaterial,
+
+        // devant
+        oakSideMaterial,
+
+        // derrière
+        oakSideMaterial
+
+    ],
 
 };
