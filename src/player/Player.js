@@ -119,6 +119,14 @@ this.camera.position.set(
 
 
         this.initControls();
+        
+this.controls.addEventListener("unlock", () => {
+    Object.keys(this.keys).forEach(key => {
+        this.keys[key] = false;
+    });
+
+    this.velocity.y = 0;
+});
 
     }
 
@@ -129,18 +137,23 @@ this.camera.position.set(
 
     initControls() {
 
-        document.addEventListener(
-            "click",
-            () => {
+this.controls.domElement.addEventListener("click", () => {
+    const mainMenu = document.getElementById("main-menu");
+    const optionsMenu = document.getElementById("options-menu");
+    const inventory = document.getElementById("inventory");
 
-                if (!this.controls.isLocked) {
+    if (
+        mainMenu?.style.display !== "none" ||
+        optionsMenu?.style.display === "flex" ||
+        inventory?.style.display === "flex"
+    ) {
+        return;
+    }
 
-                    this.controls.lock();
-
-                }
-
-            }
-        );
+    if (!this.controls.isLocked) {
+        this.controls.lock();
+    }
+});
 
 
         document.addEventListener(
@@ -551,19 +564,3 @@ isSolidBlock(x, y, z) {
 
 
 }
-
-domElement.addEventListener("click", () => {
-    const mainMenu = document.getElementById("main-menu");
-    const optionsMenu = document.getElementById("options-menu");
-    const inventory = document.getElementById("inventory");
-
-    if (
-        mainMenu?.style.display !== "none" ||
-        optionsMenu?.style.display === "flex" ||
-        inventory?.style.display === "flex"
-    ) {
-        return;
-    }
-
-    this.controls.lock();
-});
