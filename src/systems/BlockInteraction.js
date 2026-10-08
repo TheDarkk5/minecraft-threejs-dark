@@ -10,13 +10,16 @@ export class BlockInteraction {
         camera,
         world,
         scene,
-        player
+        player,
+        hotbar
     ) {
 
         this.camera = camera;
         this.world = world;
         this.scene = scene;
         this.player = player;
+
+        this.hotbar = hotbar;
 
         this.maxDistance = 5;
 
@@ -309,6 +312,11 @@ export class BlockInteraction {
 
         }
 
+        if (
+    !this.player.controls.isLocked
+) {
+    return;
+}
 
         this.world.removeBlock(
 
@@ -336,7 +344,11 @@ export class BlockInteraction {
 
         }
 
-
+if (
+    !this.player.controls.isLocked
+) {
+    return;
+}
         const x =
             this.target.x +
             Math.round(
@@ -358,12 +370,21 @@ export class BlockInteraction {
             );
 
 
-        this.world.addBlock(
-            x,
-            y,
-            z,
-            BLOCK.DIRT.id
-        );
+const blockId =
+    this.hotbar.getSelectedBlock();
+
+
+if (blockId === null) {
+    return;
+}
+
+
+this.world.addBlock(
+    x,
+    y,
+    z,
+    blockId
+);
 
 
         this.clearTarget();

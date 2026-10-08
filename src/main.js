@@ -4,7 +4,8 @@ import "./style.css";
 import { World } from "./world/World.js";
 import { Player } from "./player/Player.js";
 import {BlockInteraction} from "./systems/BlockInteraction.js";
-
+import {Hotbar} from "./ui/Hotbar.js";
+import {Inventory} from "./ui/Inventory.js";
 
 // ==========================================
 // SCENE
@@ -139,15 +140,187 @@ const player = new Player(
     world
 );
 
-const blockInteraction =
-    new BlockInteraction(
+const hotbar = new Hotbar();
+
+const inventory = new Inventory(
+        player,
+        hotbar
+);
+
+const blockInteraction = new BlockInteraction(
         camera,
         world,
         scene,
-        player
+        player,
+        hotbar
+);
+
+const clock = new THREE.Timer();
+
+
+// ==========================================
+// MENU PRINCIPAL
+// ==========================================
+
+const mainMenu =
+    document.getElementById(
+        "main-menu"
     );
 
-const clock = new THREE.Clock();
+const playButton =
+    document.getElementById(
+        "play-button"
+    );
+
+const optionsButton =
+    document.getElementById(
+        "options-button"
+    );
+
+const quitButton =
+    document.getElementById(
+        "quit-button"
+    );
+
+const crosshair =
+    document.getElementById(
+        "crosshair"
+    );
+
+const instructions =
+    document.getElementById(
+        "instructions"
+    );
+
+const hud =
+    document.getElementById(
+        "hud"
+    );
+
+let gameStarted = false;
+
+
+// ==========================================
+// JOUER
+// ==========================================
+
+playButton.addEventListener(
+    "click",
+    () => {
+
+        gameStarted = true;
+
+        mainMenu.style.display =
+            "none";
+
+        hud.style.display =
+            "block";
+
+        crosshair.style.display =
+            "block";
+
+        instructions.style.display =
+            "block";
+
+    }
+);
+
+optionsButton.addEventListener(
+    "click",
+    () => {
+
+        console.log(
+            "Menu options"
+        );
+
+    }
+);
+
+quitButton.addEventListener(
+    "click",
+    () => {
+
+        alert(
+            "Vous pouvez fermer l'onglet."
+        );
+
+    }
+);
+
+// ==========================================
+// HOTBAR
+// ==========================================
+
+let selectedSlot = 0;
+
+const hotbarSlots =
+    document.querySelectorAll(
+        ".hotbar-slot"
+    );
+
+
+function selectSlot(index) {
+
+    if (
+        index < 0 ||
+        index >= hotbarSlots.length
+    ) {
+        return;
+    }
+
+
+    hotbarSlots[
+        selectedSlot
+    ].classList.remove(
+        "selected"
+    );
+
+
+    selectedSlot = index;
+
+
+    hotbarSlots[
+        selectedSlot
+    ].classList.add(
+        "selected"
+    );
+
+}
+
+window.addEventListener(
+    "keydown",
+    (event) => {
+
+        if (
+            event.code.startsWith(
+                "Digit"
+            )
+        ) {
+
+            const number =
+                Number(
+                    event.code.replace(
+                        "Digit",
+                        ""
+                    )
+                );
+
+
+            if (
+                number >= 1 &&
+                number <= 9
+            ) {
+
+                selectSlot(
+                    number - 1
+                );
+
+            }
+
+        }
+
+    }
+);
 
 // ==========================================
 // GAME LOOP
@@ -166,6 +339,7 @@ function animate() {
             0.1
         );
 
+if (gameStarted && !inventory.isOpen) {
 
     player.update(
         deltaTime
@@ -177,6 +351,7 @@ function animate() {
 
     blockInteraction.update();
 
+}
 
     renderer.render(
         scene,
