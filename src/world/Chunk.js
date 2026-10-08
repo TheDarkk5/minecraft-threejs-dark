@@ -25,7 +25,13 @@ const CHUNK_MATERIALS = [
     BLOCK_MATERIALS.DIRT,
 
     // 3
-    BLOCK_MATERIALS.STONE
+    BLOCK_MATERIALS.STONE,
+
+      // 0
+    BLOCK_MATERIALS.OAK_LOG[2], // grass_top
+
+    // 1
+    BLOCK_MATERIALS.OAK_LOG[0], // grass_side
 
 ];
 
