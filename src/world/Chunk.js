@@ -19,8 +19,10 @@ const CHUNK_MATERIALS = [
     BLOCK_MATERIALS.DIRT,       // 2 - Terre
     BLOCK_MATERIALS.STONE,      // 3 - Pierre
     BLOCK_MATERIALS.OAK_LOG[2], // 4 - Bois dessus/dessous
-    BLOCK_MATERIALS.OAK_LOG[0]  // 5 - Bois côtés
+    BLOCK_MATERIALS.OAK_LOG[0],  // 5 - Bois côtés
+    BLOCK_MATERIALS.OAK_PLANKS,
 ];
+
 
 
 
@@ -97,6 +99,9 @@ getMaterialIndex(blockId, normal) {
 
         // Côtés
         return 5;
+    }
+ if (blockId === BLOCK.OAK_PLANKS.id) {
+        return 6;
     }
 
     return 2;

@@ -44,7 +44,9 @@ const oakTop = loadTexture(
 const oakSide = loadTexture(
     "/textures/oak_log.png"
 );
-
+const oakplanks = loadTexture(
+    "/textures/oak_planks.png"
+);
 // ================================
 // MATERIALS
 // ================================
@@ -78,58 +80,45 @@ const oakSideMaterial =
     new THREE.MeshLambertMaterial({
         map: oakSide
     });
+    const oakplanksMaterial =
+    new THREE.MeshLambertMaterial({
+        map: oakplanks
+    });
 // ================================
 // BLOCS
 // ================================
 
 export const BLOCK_MATERIALS = {
-
     GRASS: [
-
         // droite
         grassSideMaterial,
-
         // gauche
         grassSideMaterial,
-
         // dessus
         grassTopMaterial,
-
         // dessous
         dirtMaterial,
-
         // devant
         grassSideMaterial,
-
         // derrière
         grassSideMaterial
-
     ],
-
     DIRT: dirtMaterial,
-
     STONE: stoneMaterial,
-
- OAK_LOG: [
-
-        // droite
-        oakSideMaterial,
-
-        // gauche
-        oakSideMaterial,
-
-        // dessus
-        oakTopMaterial,
-
-        // dessous
-        oakTopMaterial,
-
-        // devant
-        oakSideMaterial,
-
-        // derrière
-        oakSideMaterial
-
-    ],
+    OAK_LOG: [
+            // droite
+            oakSideMaterial,
+            // gauche
+            oakSideMaterial,
+            // dessus
+            oakTopMaterial,
+            // dessous
+            oakTopMaterial,
+            // devant
+            oakSideMaterial,
+            // derrière
+            oakSideMaterial
+        ],
+    OAK_PLANKS: oakplanksMaterial,
 
 };
