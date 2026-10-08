@@ -100,12 +100,15 @@ getMaterialIndex(blockId, normal) {
         // Côtés
         return 5;
     }
+
  if (blockId === BLOCK.OAK_PLANKS.id) {
         return 6;
     }
-
+    
     return 2;
+    
 }
+
     // ==========================================
     // INDEX DU TABLEAU
     // ==========================================
