@@ -154,10 +154,17 @@ export class Chunk {
 
         return 2;
 
+    // BOIS
+    if (blockId === BLOCK.OAK_LOG.id) {
+        // Dessus et dessous
+        if (normal[1] !== 0) return 4;
+
+        // Côtés
+        return 5;
     }
 
-
-
+    return 2;
+} 
     // ==========================================
     // INDEX DU TABLEAU
     // ==========================================
