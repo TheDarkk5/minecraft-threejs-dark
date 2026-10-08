@@ -199,27 +199,17 @@ let gameStarted = false;
 // JOUER
 // ==========================================
 
-playButton.addEventListener(
-    "click",
-    () => {
-
+playButton.addEventListener("click", () => {
         gameStarted = true;
 
-        mainMenu.style.display =
-            "none";
+        mainMenu.style.display = "none";
+        hud.style.display = "block";
+        crosshair.style.display = "block";
+        instructions.style.display = "block";
 
-        hud.style.display =
-            "block";
-
-        crosshair.style.display =
-            "block";
-
-        instructions.style.display =
-            "block";
-
-    player.controls.lock();
-    }
-);
+        player.controls.lock();
+    
+});
 
 quitButton.addEventListener(
     "click",
@@ -291,13 +281,13 @@ function animate() {
             0.1
         );
 
-if (gameStarted && !inventory.isOpen && player.controls.isLocked) {
-    player.update(deltaTime);
-    blockInteraction.update();
-}
+if (gameStarted && !inventory.isOpen) {
+    world.update(camera.position);
 
-if (gameStarted) {
-    world.update(camera.position);  
+    if (player.controls.isLocked) {
+        player.update(deltaTime);
+        blockInteraction.update();
+    }
 }
 
     renderer.render(

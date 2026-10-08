@@ -137,29 +137,11 @@ this.controls.addEventListener("unlock", () => {
 
     initControls() {
 
-this.controls.domElement.addEventListener("click", () => {
-    const mainMenu = document.getElementById("main-menu");
-    const optionsMenu = document.getElementById("options-menu");
-    const inventory = document.getElementById("inventory");
-
-    if (
-        mainMenu?.style.display !== "none" ||
-        optionsMenu?.style.display === "flex" ||
-        inventory?.style.display === "flex"
-    ) {
-        return;
-    }
-
-    if (!this.controls.isLocked) {
-        this.controls.lock();
-    }
-});
 
 
-        document.addEventListener(
-            "keydown",
-            (event) => {
 
+        document.addEventListener("keydown", (event) => {
+            if(!this.controls.isLocked) return;
                 switch (event.code) {
 
                     case "KeyZ":
@@ -258,8 +240,7 @@ this.controls.domElement.addEventListener("click", () => {
 
                 }
 
-            }
-        );
+            });
 
     }
 
