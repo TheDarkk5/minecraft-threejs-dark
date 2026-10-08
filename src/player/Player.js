@@ -137,8 +137,16 @@ this.controls.addEventListener("unlock", () => {
 
     initControls() {
 
+playButton.addEventListener("click", () => {
+    gameStarted = true;
 
+    mainMenu.style.display = "none";
+    hud.style.display = "block";
+    crosshair.style.display = "block";
+    instructions.style.display = "none";
 
+    player.controls.lock();
+});
 
         document.addEventListener("keydown", (event) => {
             if(!this.controls.isLocked) return;
