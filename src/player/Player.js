@@ -549,4 +549,21 @@ isSolidBlock(x, y, z) {
 
 }
 
+
 }
+
+domElement.addEventListener("click", () => {
+    const mainMenu = document.getElementById("main-menu");
+    const optionsMenu = document.getElementById("options-menu");
+    const inventory = document.getElementById("inventory");
+
+    if (
+        mainMenu?.style.display !== "none" ||
+        optionsMenu?.style.display === "flex" ||
+        inventory?.style.display === "flex"
+    ) {
+        return;
+    }
+
+    this.controls.lock();
+});

@@ -217,6 +217,7 @@ playButton.addEventListener(
         instructions.style.display =
             "block";
 
+    player.controls.lock();
     }
 );
 
@@ -290,18 +291,15 @@ function animate() {
             0.1
         );
 
-if (gameStarted && !inventory.isOpen) {
+if (gameStarted && !inventory.isOpen  &&
+    player.controls.isLocked) {
 
-    player.update(
-        deltaTime
-    );
-
-    world.update(
-        camera.position
-    );  
-
+    player.update(deltaTime);
     blockInteraction.update();
+}
 
+if (gameStarted) {
+    world.update(camera.position);  
 }
 
     renderer.render(
