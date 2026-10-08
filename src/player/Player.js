@@ -137,17 +137,6 @@ this.controls.addEventListener("unlock", () => {
 
     initControls() {
 
-playButton.addEventListener("click", () => {
-    gameStarted = true;
-
-    mainMenu.style.display = "none";
-    hud.style.display = "block";
-    crosshair.style.display = "block";
-    instructions.style.display = "none";
-
-    player.controls.lock();
-});
-
         document.addEventListener("keydown", (event) => {
             if(!this.controls.isLocked) return;
                 switch (event.code) {
@@ -380,58 +369,25 @@ playButton.addEventListener("click", () => {
     // GRAVITE
     // ==========================================
 
-    updateGravity(deltaTime) {
+updateGravity(deltaTime) {
+    this.velocity.y -= this.gravity * deltaTime;
 
-        this.velocity.y -=
-            this.gravity * deltaTime;
+    const oldY = this.camera.position.y;
 
+    this.camera.position.y += this.velocity.y * deltaTime;
 
-        const oldY =
-            this.camera.position.y;
+    if (this.checkCollision()) {
+        this.camera.position.y = oldY;
 
-
-        this.camera.position.y +=
-            this.velocity.y *
-            deltaTime;
-
-
-        // Collision
-
-        if (this.checkCollision()) {
-
-            // On était en train de tomber
-
-            if (this.velocity.y < 0) {
-
-                this.camera.position.y =
-                    oldY;
-
-                this.velocity.y = 0;
-
-                this.onGround = true;
-
-            }
-
-            // On touche un plafond
-
-            else {
-
-                this.camera.position.y =
-                    oldY;
-
-                this.velocity.y = 0;
-
-            }
-
+        if (this.velocity.y < 0) {
+            this.onGround = true;
         }
 
-        else {
-
-            this.onGround = false;
-
-        }
-
+        this.velocity.y = 0;
+    } else {
+        this.onGround = false;
     }
+}
 
 
     // ==========================================
