@@ -12,6 +12,7 @@ export class World {
         this.chunks = new Map();
 
 this.renderDistance = 3;
+this.unloadDistance = this.renderDistance + 2;
 
 this.lastPlayerChunkX = null;
 this.lastPlayerChunkZ = null;
@@ -453,48 +454,27 @@ addBlock(
 }
 
 update(playerPosition) {
+    const chunkX = Math.floor(
+        playerPosition.x / Chunk.SIZE
+    );
 
-    // Chunk dans lequel se trouve le joueur
-    const playerChunkX =
-        Math.floor(
-            playerPosition.x /
-            Chunk.SIZE
-        );
+    const chunkZ = Math.floor(
+        playerPosition.z / Chunk.SIZE
+    );
 
-    const playerChunkZ =
-        Math.floor(
-            playerPosition.z /
-            Chunk.SIZE
-        );
-
-
-    // Le joueur est toujours dans le même chunk
-    // donc inutile de recalculer
     if (
-        playerChunkX === this.lastPlayerChunkX &&
-        playerChunkZ === this.lastPlayerChunkZ
+        chunkX === this.lastPlayerChunkX &&
+        chunkZ === this.lastPlayerChunkZ
     ) {
         return;
     }
 
+    this.lastPlayerChunkX = chunkX;
+    this.lastPlayerChunkZ = chunkZ;
 
-    this.lastPlayerChunkX =
-        playerChunkX;
+    this.loadChunksAroundPlayer(chunkX, chunkZ);
 
-    this.lastPlayerChunkZ =
-        playerChunkZ;
-
-
-    console.log(
-        `Chunk joueur : ${playerChunkX}, ${playerChunkZ}`
-    );
-
-
-    this.loadChunksAroundPlayer(
-        playerChunkX,
-        playerChunkZ
-    );
-
+    this.unloadDistantChunks(chunkX, chunkZ);
 }
 
 loadChunksAroundPlayer(
@@ -583,6 +563,34 @@ loadChunksAroundPlayer(
 
     }
 
+}
+
+unloadDistantChunks(playerChunkX, playerChunkZ) {
+    for (const [key, chunk] of this.chunks) {
+        const dx = Math.abs(chunk.chunkX - playerChunkX);
+        const dz = Math.abs(chunk.chunkZ - playerChunkZ);
+
+        if (
+            dx > this.unloadDistance ||
+            dz > this.unloadDistance
+        ) {
+            chunk.unload();
+            this.chunks.delete(key);
+        }
+    }
+}
+
+setRenderDistance(distance) {
+    const value = Math.max(2, Math.min(12, Math.floor(distance)));
+
+    if (value === this.renderDistance) return;
+
+    this.renderDistance = value;
+    this.unloadDistance = value + 2;
+
+    // Force le rechargement des chunks au prochain update()
+    this.lastPlayerChunkX = null;
+    this.lastPlayerChunkZ = null;
 }
 
 }

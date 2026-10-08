@@ -500,3 +500,50 @@ canvas {
     margin-bottom: 8px;
     text-shadow: 2px 2px black;
 }
+
+/* MENU OPTIONS */
+
+#options-menu {
+    position: fixed;
+    inset: 0;
+    z-index: 1100;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(0, 0, 0, 0.85);
+    font-family: monospace;
+}
+
+.options-container {
+    width: 420px;
+    padding: 30px;
+    text-align: center;
+
+    background: #c6c6c6;
+    border: 4px solid #222;
+
+    box-shadow:
+        inset 4px 4px #fff,
+        inset -4px -4px #555;
+}
+
+.options-container h2 {
+    color: #222;
+    margin-bottom: 25px;
+}
+
+.option-setting {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+    color: #222;
+}
+
+#render-distance {
+    width: 100%;
+    cursor: pointer;
+    accent-color: #4caf50;
+}

@@ -132,7 +132,7 @@ window.addEventListener(
 );
 
 // ==========================================
-// PLAYYR
+// PLAYER
 // ==========================================
 const player = new Player(
     camera,
@@ -225,17 +225,6 @@ playButton.addEventListener(
     }
 );
 
-optionsButton.addEventListener(
-    "click",
-    () => {
-
-        console.log(
-            "Menu options"
-        );
-
-    }
-);
-
 quitButton.addEventListener(
     "click",
     () => {
@@ -321,6 +310,48 @@ window.addEventListener(
 
     }
 );
+
+// =================================
+// OPTIONS - DISTANCE DE RENDU
+// =================================
+
+const optionsMenu = document.getElementById("options-menu");
+const optionsButton = document.getElementById("options-button");
+const optionsBackButton = document.getElementById("options-back-button");
+
+const renderDistanceSlider = document.getElementById("render-distance");
+const renderDistanceValue = document.getElementById("render-distance-value");
+
+// Charger la valeur enregistrée
+const savedDistance = Number(localStorage.getItem("renderDistance"));
+
+if (Number.isInteger(savedDistance) && savedDistance >= 2 && savedDistance <= 12) {
+    world.setRenderDistance(savedDistance);
+}
+
+renderDistanceSlider.value = world.renderDistance;
+renderDistanceValue.textContent = world.renderDistance;
+
+// Ouvrir les options
+optionsButton.addEventListener("click", () => {
+    optionsMenu.style.display = "flex";
+});
+
+// Retour au menu principal
+optionsBackButton.addEventListener("click", () => {
+    optionsMenu.style.display = "none";
+});
+
+// Modifier la distance
+renderDistanceSlider.addEventListener("input", (event) => {
+    const distance = Number(event.target.value);
+
+    renderDistanceValue.textContent = distance;
+
+    world.setRenderDistance(distance);
+
+    localStorage.setItem("renderDistance", String(distance));
+});
 
 // ==========================================
 // GAME LOOP

@@ -970,4 +970,14 @@ export class Chunk {
 
     }
 
+unload() {
+    if (this.mesh) {
+        this.scene.remove(this.mesh);
+
+        this.mesh.geometry.dispose();
+
+        this.mesh = null;
+    }
+}
+
 }
