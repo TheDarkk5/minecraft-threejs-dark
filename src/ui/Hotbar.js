@@ -21,8 +21,12 @@ export class Hotbar {
                 name: "Pierre",
                 blockId: BLOCK.STONE.id
             },
+            
+            {
+                name: "Bois",
+                blockId: BLOCK.OAK_LOG.id
+            },
 
-            null,
             null,
             null,
             null,

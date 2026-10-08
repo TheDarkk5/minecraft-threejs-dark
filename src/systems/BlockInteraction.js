@@ -1,7 +1,6 @@
 import * as THREE from "three";
 
-import { BLOCK }
-from "../blocks/BlockTypes.js";
+import { BLOCK } from "../blocks/BlockTypes.js";
 
 
 export class BlockInteraction {
