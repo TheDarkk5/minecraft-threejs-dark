@@ -14,25 +14,12 @@ import {
 // ==========================================
 
 const CHUNK_MATERIALS = [
-
-    // 0
-    BLOCK_MATERIALS.GRASS[2], // grass_top
-
-    // 1
-    BLOCK_MATERIALS.GRASS[0], // grass_side
-
-    // 2
-    BLOCK_MATERIALS.DIRT,
-
-    // 3
-    BLOCK_MATERIALS.STONE,
-
-      // 0
-    BLOCK_MATERIALS.OAK_LOG[2], // grass_top
-
-    // 1
-    BLOCK_MATERIALS.OAK_LOG[0], // grass_side
-
+    BLOCK_MATERIALS.GRASS[2],   // 0 - Herbe dessus
+    BLOCK_MATERIALS.GRASS[0],   // 1 - Herbe côtés
+    BLOCK_MATERIALS.DIRT,       // 2 - Terre
+    BLOCK_MATERIALS.STONE,      // 3 - Pierre
+    BLOCK_MATERIALS.OAK_LOG[2], // 4 - Bois dessus/dessous
+    BLOCK_MATERIALS.OAK_LOG[0]  // 5 - Bois côtés
 ];
 
 
@@ -84,75 +71,24 @@ export class Chunk {
     // MATERIAL D'UNE FACE
     // ==========================================
 
-    getMaterialIndex(
-        blockId,
-        normal
-    ) {
+getMaterialIndex(blockId, normal) {
 
-        // ======================================
-        // HERBE
-        // ======================================
+    // HERBE
+    if (blockId === BLOCK.GRASS.id) {
+        if (normal[1] === 1) return 0;
+        if (normal[1] === -1) return 2;
+        return 1;
+    }
 
-        if (
-            blockId ===
-            BLOCK.GRASS.id
-        ) {
-
-            // Dessus
-            if (
-                normal[1] === 1
-            ) {
-
-                return 0;
-
-            }
-
-
-            // Dessous
-            if (
-                normal[1] === -1
-            ) {
-
-                return 2;
-
-            }
-
-
-            // Côtés
-            return 1;
-
-        }
-
-
-        // ======================================
-        // TERRE
-        // ======================================
-
-        if (
-            blockId ===
-            BLOCK.DIRT.id
-        ) {
-
-            return 2;
-
-        }
-
-
-        // ======================================
-        // PIERRE
-        // ======================================
-
-        if (
-            blockId ===
-            BLOCK.STONE.id
-        ) {
-
-            return 3;
-
-        }
-
-
+    // TERRE
+    if (blockId === BLOCK.DIRT.id) {
         return 2;
+    }
+
+    // PIERRE
+    if (blockId === BLOCK.STONE.id) {
+        return 3;
+    }
 
     // BOIS
     if (blockId === BLOCK.OAK_LOG.id) {
@@ -164,7 +100,7 @@ export class Chunk {
     }
 
     return 2;
-} 
+}
     // ==========================================
     // INDEX DU TABLEAU
     // ==========================================
