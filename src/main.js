@@ -6,6 +6,7 @@ import { Player } from "./player/Player.js";
 import {BlockInteraction} from "./systems/BlockInteraction.js";
 import {Hotbar} from "./ui/Hotbar.js";
 import {Inventory} from "./ui/Inventory.js";
+import { CraftingSystem } from "./systems/CraftingSystem.js";
 
 // ==========================================
 // SCENE
@@ -154,6 +155,8 @@ const blockInteraction = new BlockInteraction(
         player,
         hotbar
 );
+
+const crafting = new CraftingSystem();
 
 const clock = new THREE.Clock();
 

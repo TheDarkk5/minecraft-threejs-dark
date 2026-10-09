@@ -547,3 +547,39 @@ canvas {
     cursor: pointer;
     accent-color: #4caf50;
 }
+
+#crafting {
+    margin: 20px 0;
+    color: white;
+}
+
+.crafting-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.crafting-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 48px);
+    gap: 4px;
+}
+
+.craft-slot {
+    width: 48px;
+    height: 48px;
+    background: #777;
+    border: 2px solid #333;
+    box-sizing: border-box;
+    image-rendering: pixelated;
+    cursor: pointer;
+}
+
+.craft-slot:hover {
+    background: #999;
+}
+
+.craft-arrow {
+    font-size: 28px;
+    color: white;
+}
