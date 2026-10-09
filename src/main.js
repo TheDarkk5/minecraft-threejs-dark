@@ -147,7 +147,6 @@ const inventory = new Inventory(
         hotbar
 );
 
-inventory.addItem(BLOCK.OAK_LOG.id, 5);
 
 const blockInteraction = new BlockInteraction(
         camera,
@@ -158,6 +157,7 @@ const blockInteraction = new BlockInteraction(
         inventory
 );
 
+inventory.addItem(BLOCK.OAK_LOG.id, 5);
 
 const clock = new THREE.Clock();
 
