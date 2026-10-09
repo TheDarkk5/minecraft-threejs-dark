@@ -149,9 +149,9 @@ hotbar.storage = storage;
 const inventory = new Inventory(player, hotbar, storage);
 
 // Objets de départ pour tester
-//storage.addItem(BLOCK.OAK_LOG.id, 5);
-//storage.addItem(BLOCK.DIRT.id, 32);
-//storage.addItem(BLOCK.STONE.id, 16);
+storage.addItem(BLOCK.OAK_LOG.id, 5);
+storage.addItem(BLOCK.DIRT.id, 32);
+storage.addItem(BLOCK.STONE.id, 16);
 
 hotbar.updateUI();
 inventory.updateUI();
