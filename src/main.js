@@ -157,7 +157,7 @@ const blockInteraction = new BlockInteraction(
         inventory
 );
 
-inventory.addItem(BLOCK.OAK_LOG.id, 5);
+// inventory.addItem(BLOCK.OAK_LOG.id, 5);
 
 const clock = new THREE.Clock();
 
