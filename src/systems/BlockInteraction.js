@@ -311,18 +311,21 @@ breakBlock() {
     }
 
     const { x, y, z } = this.target;
-
     const blockId = this.world.getBlock(x, y, z);
 
-    if (blockId === BLOCK.AIR.id || blockId == null) {
+    if (blockId == null || blockId === BLOCK.AIR.id) {
+        return;
+    }
+
+    // Ne pas casser si l'inventaire est plein
+    if (this.inventory.storage.addItem(blockId, 1) > 0) {
         return;
     }
 
     this.world.removeBlock(x, y, z);
 
-    // Ajouter le bloc récupéré dans l'inventaire
-    this.inventory.addItem(blockId, 1);
-
+    this.inventory.updateUI();
+    this.hotbar.updateUI();
     this.clearTarget();
 }
 
@@ -335,35 +338,28 @@ placeBlock() {
         return;
     }
 
-    const x = this.target.x +
-        Math.round(this.target.normal.x);
+    const x = this.target.x + Math.round(this.target.normal.x);
+    const y = this.target.y + Math.round(this.target.normal.y);
+    const z = this.target.z + Math.round(this.target.normal.z);
 
-    const y = this.target.y +
-        Math.round(this.target.normal.y);
+    const slotIndex = this.hotbar.selectedSlot;
+    const item = this.inventory.storage.slots[slotIndex];
 
-    const z = this.target.z +
-        Math.round(this.target.normal.z);
+    if (!item || item.count <= 0) return;
 
-    const blockId = this.hotbar.getSelectedBlock();
-
-    if (blockId == null) return;
-
-    // Vérifier le stock
-    if (this.inventory.getItemCount(blockId) <= 0) {
-        return;
-    }
-
-    // Vérifier que la position est vide
     if (this.world.getBlock(x, y, z) !== BLOCK.AIR.id) {
         return;
     }
 
-    // Placer le bloc
-    this.world.addBlock(x, y, z, blockId);
+    // Consommer l'objet sélectionné
+    if (!this.inventory.storage.removeFromSlot(slotIndex, 1)) {
+        return;
+    }
 
-    // Consommer un bloc
-    this.inventory.removeItem(blockId, 1);
+    this.world.addBlock(x, y, z, item.blockId);
 
+    this.inventory.updateUI();
+    this.hotbar.updateUI();
     this.clearTarget();
 }
 

@@ -6,7 +6,8 @@ import { Player } from "./player/Player.js";
 import {BlockInteraction} from "./systems/BlockInteraction.js";
 import {Hotbar} from "./ui/Hotbar.js";
 import {Inventory} from "./ui/Inventory.js";
-
+import { InventoryStorage } from "./systems/InventoryStorage.js";
+import { BLOCK } from "./blocks/BlockTypes.js";
 // ==========================================
 // SCENE
 // ==========================================
@@ -140,12 +141,20 @@ const player = new Player(
     world
 );
 
-const hotbar = new Hotbar();
+const storage = new InventoryStorage();
 
-const inventory = new Inventory(
-        player,
-        hotbar
-);
+const hotbar = new Hotbar();
+hotbar.storage = storage;
+
+const inventory = new Inventory(player, hotbar, storage);
+
+// Objets de départ pour tester
+storage.addItem(BLOCK.OAK_LOG.id, 5);
+storage.addItem(BLOCK.DIRT.id, 32);
+storage.addItem(BLOCK.STONE.id, 16);
+
+hotbar.updateUI();
+inventory.updateUI();
 
 
 const blockInteraction = new BlockInteraction(

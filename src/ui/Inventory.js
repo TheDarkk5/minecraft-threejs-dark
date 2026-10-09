@@ -2,347 +2,328 @@ import { BLOCK } from "../blocks/BlockTypes.js";
 import { CraftingSystem } from "../systems/CraftingSystem.js";
 
 export class Inventory {
-
-    constructor(player, hotbar) {
-
+    constructor(player, hotbar, storage) {
         this.player = player;
         this.hotbar = hotbar;
+        this.storage = storage;
 
         this.crafting = new CraftingSystem();
-
         this.craftGrid = [null, null, null, null];
 
-        this.items = {
-            [BLOCK.OAK_LOG.id]: 0,
-            [BLOCK.OAK_PLANKS.id]: 0
+        this.cursorItem = null;
+        this.isOpen = false;
+
+        this.element = document.getElementById("inventory");
+        this.slots = document.querySelectorAll(".inventory-slot");
+        this.craftSlots = document.querySelectorAll(
+            ".craft-slot[data-craft]"
+        );
+        this.resultSlot = document.getElementById("craft-result");
+
+        this.textures = {
+            [BLOCK.GRASS.id]: "/textures/grass_top.png",
+            [BLOCK.DIRT.id]: "/textures/dirt.png",
+            [BLOCK.STONE.id]: "/textures/stone.png",
+            [BLOCK.OAK_LOG.id]: "/textures/oak_log.png",
+            [BLOCK.OAK_PLANKS.id]: "/textures/oak_planks.png"
         };
 
-        this.isOpen = false;
-
-        this.element =
-            document.getElementById(
-                "inventory"
-            );
-
-        this.slots =
-            document.querySelectorAll(
-                ".inventory-slot"
-            );
-
+        this.cursorElement = document.createElement("div");
+        this.cursorElement.className = "cursor-item";
+        document.body.appendChild(this.cursorElement);
 
         this.setupKeyboard();
-
         this.setupSlots();
         this.setupCrafting();
-        this.updateQuantities();
+        this.setupCursor();
+
+        this.updateUI();
     }
-
-
-    // ==========================================
-    // CLAVIER
-    // ==========================================
 
     setupKeyboard() {
+        window.addEventListener("keydown", event => {
+            if (event.code !== "KeyE" || event.repeat) return;
 
-        window.addEventListener(
-            "keydown",
-            (event) => {
-
-                if (
-                    event.code !== "KeyE" ||
-                    event.repeat
-                ) {
-                    return;
-                }
-
-
-                if (this.isOpen) {
-
-                    this.close();
-
-                } else {
-
-                    this.open();
-
-                }
-
+            if (this.isOpen) {
+                this.close();
+            } else {
+                this.open();
             }
-        );
-
+        });
     }
-
-
-    // ==========================================
-    // OUVRIR
-    // ==========================================
 
     open() {
-
         this.isOpen = true;
+        this.element.style.display = "flex";
 
-        this.element.style.display =
-            "flex";
-
-
-        // Libère la souris
-
-        if (
-            this.player.controls.isLocked
-        ) {
-
+        if (this.player.controls.isLocked) {
             this.player.controls.unlock();
-
         }
 
+        this.updateUI();
     }
-
-
-    // ==========================================
-    // FERMER
-    // ==========================================
 
     close() {
+        // Replacer l'objet tenu dans le stockage
+        if (this.cursorItem) {
+            const remaining = this.storage.addItem(
+                this.cursorItem.blockId,
+                this.cursorItem.count
+            );
 
-        this.isOpen = false;
-
-        this.element.style.display =
-            "none";
-
-
-        // Recapture la souris
-
-        this.player.controls.lock();
-
-    }
-
-
-    // ==========================================
-    // CASES
-    // ==========================================
-
-    setupSlots() {
-
-        this.slots.forEach(
-            (slot) => {
-
-                slot.addEventListener(
-                    "click",
-                    () => {
-
-                        const block =
-                            slot.dataset.block;
-
-
-                        if (!block) {
-                            return;
-                        }
-
-
-                        let item = null;
-
-
-                        if (block === "grass") {
-
-                            item = {
-                                name: "Herbe",
-                                blockId:
-                                    BLOCK.GRASS.id
-                            };
-
-                        }
-
-
-                        if (block === "dirt") {
-
-                            item = {
-                                name: "Terre",
-                                blockId:
-                                    BLOCK.DIRT.id
-                            };
-
-                        }
-
-
-                        if (block === "stone") {
-
-                            item = {
-                                name: "Pierre",
-                                blockId:
-                                    BLOCK.STONE.id
-                            };
-
-                        }
-
-
-                        if (!item) {
-                            return;
-                        }
-
-
-                        // Met le bloc dans
-                        // la case sélectionnée
-
-                        this.hotbar.slots[
-                            this.hotbar.selectedSlot
-                        ] = item;
-
-
-                        this.hotbar.updateUI();
-
-                    }
-                );
-
-            }
-        );
-
-    }
-addItem(blockId, count = 1) {
-    this.items[blockId] =
-        (this.items[blockId] || 0) + count;
-
-    this.updateCrafting();
-    this.updateQuantities();
-}
-
-setupCrafting() {
-    const slots = document.querySelectorAll(
-        ".craft-slot[data-craft]"
-    );
-
-    slots.forEach(slot => {
-        slot.addEventListener("click", () => {
-            const index = Number(slot.dataset.craft);
-
-            if (this.craftGrid[index] !== null) {
-                const blockId = this.craftGrid[index];
-
-                this.craftGrid[index] = null;
-                this.addItem(blockId);
+            if (remaining > 0) {
+                // Garder les objets qui ne rentrent pas
+                this.cursorItem.count = remaining;
+                this.updateUI();
                 return;
             }
 
-            const blockId = this.hotbar.getSelectedBlock();
-
-            if (blockId == null) return;
-            if ((this.items[blockId] || 0) <= 0) return;
-
-            this.items[blockId]--;
-            this.craftGrid[index] = blockId;
-
-            this.updateCrafting();
-        });
-    });
-
-    document.getElementById("craft-result")
-        .addEventListener("click", () => {
-            const result = this.crafting.craft(this.craftGrid);
-
-            if (!result) return;
-
-            this.addItem(result.blockId, result.count);
-        });
-
-    this.updateCrafting();
+            this.cursorItem = null;
+        }
+if (!this.returnCraftItems()) {
+    this.updateUI();
+    return;
 }
-
-updateCrafting() {
-    const textures = {
-        [BLOCK.OAK_LOG.id]: "/textures/oak_log.png",
-        [BLOCK.OAK_PLANKS.id]: "/textures/oak_planks.png"
-    };
-
-    document.querySelectorAll(".craft-slot[data-craft]")
-        .forEach((slot, index) => {
-            slot.replaceChildren();
-
-            const blockId = this.craftGrid[index];
-            if (blockId == null) return;
-
-            const image = document.createElement("img");
-            image.src = textures[blockId] || "";
-            image.style.width = "100%";
-            image.style.height = "100%";
-            image.style.imageRendering = "pixelated";
-
-            slot.appendChild(image);
-        });
-
-    const resultSlot = document.getElementById("craft-result");
-    if (!resultSlot) return;
-
-    resultSlot.replaceChildren();
-
-    const result = this.crafting.getResult(this.craftGrid);
-    if (!result) return;
-
-    const image = document.createElement("img");
-    image.src = textures[result.blockId] || "";
-    image.style.width = "100%";
-    image.style.height = "100%";
-    image.style.imageRendering = "pixelated";
-
-    resultSlot.appendChild(image);
-
-    const quantity = document.createElement("span");
-    quantity.textContent = result.count;
-
-    resultSlot.appendChild(quantity);
-}
-
-// Gestion du stock
-getItemCount(blockId) {
-    return this.items[blockId] || 0;
-}
-
-removeItem(blockId, count = 1) {
-    if (this.getItemCount(blockId) < count) {
-        return false;
+        this.isOpen = false;
+        this.element.style.display = "none";
+        this.player.controls.lock();
+        this.updateUI();
     }
 
-    this.items[blockId] -= count;
-    this.updateCrafting();
-    this.updateQuantities();
+    setupSlots() {
+        // Les 27 cases de l'inventaire correspondent aux indices 9 à 35
+        this.slots.forEach((element, index) => {
+            const storageIndex = index + 9;
 
-    return true;
+            element.addEventListener("mousedown", event => {
+                if (event.button !== 0 && event.button !== 2) return;
+
+                event.preventDefault();
+                this.handleSlot(storageIndex, event.button);
+            });
+        });
+
+        // Les 9 cases de la hotbar
+        this.hotbar.elements.forEach((element, index) => {
+            element.addEventListener("mousedown", event => {
+                if (!this.isOpen) return;
+                if (event.button !== 0 && event.button !== 2) return;
+
+                event.preventDefault();
+                this.handleSlot(index, event.button);
+            });
+        });
+    }
+
+    handleSlot(index, button) {
+        const slot = this.storage.slots[index];
+
+        if (button === 0) {
+            // Clic gauche
+            if (!this.cursorItem) {
+                if (!slot) return;
+
+                this.cursorItem = slot;
+                this.storage.slots[index] = null;
+            } else if (!slot) {
+                this.storage.slots[index] = this.cursorItem;
+                this.cursorItem = null;
+            } else if (slot.blockId === this.cursorItem.blockId) {
+                const space = 64 - slot.count;
+                const moved = Math.min(space, this.cursorItem.count);
+
+                slot.count += moved;
+                this.cursorItem.count -= moved;
+
+                if (this.cursorItem.count === 0) {
+                    this.cursorItem = null;
+                }
+            } else {
+                this.storage.slots[index] = this.cursorItem;
+                this.cursorItem = slot;
+            }
+        }
+
+        if (button === 2) {
+            // Clic droit
+            if (!this.cursorItem) {
+                if (!slot) return;
+
+                const count = Math.ceil(slot.count / 2);
+
+                this.cursorItem = {
+                    blockId: slot.blockId,
+                    count
+                };
+
+                slot.count -= count;
+
+                if (slot.count === 0) {
+                    this.storage.slots[index] = null;
+                }
+            } else if (!slot) {
+                this.storage.slots[index] = {
+                    blockId: this.cursorItem.blockId,
+                    count: 1
+                };
+
+                this.cursorItem.count--;
+            } else if (
+                slot.blockId === this.cursorItem.blockId &&
+                slot.count < 64
+            ) {
+                slot.count++;
+                this.cursorItem.count--;
+            }
+
+            if (this.cursorItem?.count === 0) {
+                this.cursorItem = null;
+            }
+        }
+
+        this.updateUI();
+    }
+
+    setupCrafting() {
+        this.craftSlots.forEach((element, index) => {
+            element.addEventListener("mousedown", event => {
+                if (event.button !== 0 && event.button !== 2) return;
+
+                event.preventDefault();
+
+                const current = this.craftGrid[index];
+
+                if (current !== null) {
+                    if (this.cursorItem &&
+                        this.cursorItem.blockId !== current) return;
+
+                    if (!this.cursorItem) {
+                        this.cursorItem = {
+                            blockId: current,
+                            count: 1
+                        };
+                    } else if (this.cursorItem.count < 64) {
+                        this.cursorItem.count++;
+                    } else {
+                        return;
+                    }
+
+                    this.craftGrid[index] = null;
+                } else if (this.cursorItem) {
+                    this.craftGrid[index] = this.cursorItem.blockId;
+                    this.cursorItem.count--;
+
+                    if (this.cursorItem.count === 0) {
+                        this.cursorItem = null;
+                    }
+                }
+
+                this.updateUI();
+            });
+        });
+
+        this.resultSlot?.addEventListener("mousedown", event => {
+            if (event.button !== 0) return;
+
+            event.preventDefault();
+
+            const result = this.crafting.getResult(this.craftGrid);
+            if (!result) return;
+
+            if (this.cursorItem) {
+                if (this.cursorItem.blockId !== result.blockId) return;
+                if (this.cursorItem.count + result.count > 64) return;
+
+                this.cursorItem.count += result.count;
+            } else {
+                this.cursorItem = { ...result };
+            }
+
+            this.craftGrid.fill(null);
+            this.updateUI();
+        });
+    }
+
+    setupCursor() {
+        window.addEventListener("mousemove", event => {
+            this.cursorElement.style.left = `${event.clientX + 8}px`;
+            this.cursorElement.style.top = `${event.clientY + 8}px`;
+        });
+    }
+
+renderItem(element, item) {
+    element.querySelectorAll(".item-icon, .item-count")
+        .forEach(child => child.remove());
+
+    if (!item) return;
+
+    const texture = this.textures[item.blockId];
+
+    if (texture) {
+        const image = document.createElement("img");
+        image.src = texture;
+        image.className = "item-icon";
+        element.appendChild(image);
+    }
+
+    if (item.count > 1) {
+        const count = document.createElement("span");
+        count.className = "item-count";
+        count.textContent = item.count;
+        element.appendChild(count);
+    }
 }
 
-updateQuantities() {
-    const updateSlot = (element, blockId) => {
-        element.querySelector(".item-count")?.remove();
+    updateUI() {
+        // Inventaire
+        this.slots.forEach((element, index) => {
+            this.renderItem(element, this.storage.slots[index + 9]);
+        });
 
-        if (blockId == null) return;
+        // Hotbar
+        this.hotbar.elements.forEach((element, index) => {
+            this.renderItem(element, this.storage.slots[index]);
+        });
 
-        const count = this.getItemCount(blockId);
+        // Craft
+        this.craftSlots.forEach((element, index) => {
+            const blockId = this.craftGrid[index];
 
-        const quantity = document.createElement("span");
-        quantity.className = "item-count";
-        quantity.textContent = count;
-        quantity.style.display = count > 0 ? "block" : "none";
+            this.renderItem(
+                element,
+                blockId === null ? null : { blockId, count: 1 }
+            );
+        });
 
-        element.appendChild(quantity);
-    };
+        // Résultat
+        if (this.resultSlot) {
+            this.renderItem(
+                this.resultSlot,
+                this.crafting.getResult(this.craftGrid)
+            );
+        }
 
-    // Hotbar
-    this.hotbar.elements.forEach((element, index) => {
-        const item = this.hotbar.slots[index];
+        // Objet sur le curseur
+        this.renderItem(this.cursorElement, this.cursorItem);
 
-        updateSlot(element, item?.blockId);
-    });
+        this.cursorElement.style.display =
+            this.isOpen && this.cursorItem ? "block" : "none";
 
-    // Inventaire
-    const blockIds = {
-        grass: BLOCK.GRASS.id,
-        dirt: BLOCK.DIRT.id,
-        stone: BLOCK.STONE.id,
-        oak_log: BLOCK.OAK_LOG.id,
-        oak_planks: BLOCK.OAK_PLANKS.id
-    };
+        this.hotbar.updateUI();
+    }
+   returnCraftItems() {
+    for (let i = 0; i < this.craftGrid.length; i++) {
+        const blockId = this.craftGrid[i];
 
-    this.slots.forEach(element => {
-        const blockId = blockIds[element.dataset.block];
+        if (blockId === null) continue;
 
-        updateSlot(element, blockId);
-    });
-}
+        const remaining = this.storage.addItem(blockId, 1);
 
+        if (remaining === 0) {
+            this.craftGrid[i] = null;
+        }
+    }
+
+    return this.craftGrid.every(item => item === null);
+} 
 }

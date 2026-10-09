@@ -599,3 +599,98 @@ canvas {
     text-shadow: 2px 2px 2px black;
     pointer-events: none;
 }
+.inventory-slot,
+.hotbar-slot,
+.craft-slot {
+    position: relative;
+    cursor: pointer;
+}
+
+.item-icon {
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
+    image-rendering: pixelated;
+    pointer-events: none;
+}
+
+.item-count {
+    position: absolute;
+    right: 3px;
+    bottom: 2px;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    text-shadow: 2px 2px 2px black;
+    pointer-events: none;
+}
+
+.cursor-item {
+    position: fixed;
+    width: 48px;
+    height: 48px;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+.cursor-item .item-icon {
+    width: 100%;
+    height: 100%;
+}
+
+/* Fenêtre suffisamment large pour 9 cases */
+.inventory-window {
+    width: 560px;
+    max-width: 95vw;
+}
+
+/* Inventaire */
+#inventory-grid {
+    display: grid;
+    grid-template-columns: repeat(9, 52px);
+    gap: 3px;
+    justify-content: center;
+}
+
+/* Craft */
+#crafting {
+    margin: 20px 0;
+    color: #222;
+}
+
+.crafting-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.craft-slot {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Quantités */
+.inventory-slot .item-count,
+.hotbar-slot .item-count,
+.craft-slot .item-count {
+    display: block;
+    position: absolute;
+    right: 3px;
+    bottom: 2px;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    text-shadow: 2px 2px black;
+    pointer-events: none;
+}
+
+/* Objet déplacé avec la souris */
+.cursor-item {
+    position: fixed;
+    width: 48px;
+    height: 48px;
+    pointer-events: none;
+    z-index: 9999;
+}
