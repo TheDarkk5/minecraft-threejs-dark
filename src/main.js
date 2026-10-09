@@ -6,7 +6,6 @@ import { Player } from "./player/Player.js";
 import {BlockInteraction} from "./systems/BlockInteraction.js";
 import {Hotbar} from "./ui/Hotbar.js";
 import {Inventory} from "./ui/Inventory.js";
-import { CraftingSystem } from "./systems/CraftingSystem.js";
 
 // ==========================================
 // SCENE
@@ -148,15 +147,17 @@ const inventory = new Inventory(
         hotbar
 );
 
+inventory.addItem(BLOCK.OAK_LOG.id, 5);
+
 const blockInteraction = new BlockInteraction(
         camera,
         world,
         scene,
         player,
-        hotbar
+        hotbar,
+        inventory
 );
 
-const crafting = new CraftingSystem();
 
 const clock = new THREE.Clock();
 

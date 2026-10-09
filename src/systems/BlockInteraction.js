@@ -10,7 +10,8 @@ export class BlockInteraction {
         world,
         scene,
         player,
-        hotbar
+        hotbar,
+        inventory
     ) {
 
         this.camera = camera;
@@ -19,6 +20,7 @@ export class BlockInteraction {
         this.player = player;
 
         this.hotbar = hotbar;
+        this.inventory = inventory;
 
         this.maxDistance = 5;
 
@@ -303,91 +305,68 @@ export class BlockInteraction {
     // CASSER
     // ==========================================
 
-    breakBlock() {
-
-        if (!this.target) {
-
-            return;
-
-        }
-
-        if (
-    !this.player.controls.isLocked
-) {
-    return;
-}
-
-        this.world.removeBlock(
-
-            this.target.x,
-            this.target.y,
-            this.target.z
-
-        );
-
-
-        this.clearTarget();
-
+breakBlock() {
+    if (!this.target || !this.player.controls.isLocked) {
+        return;
     }
 
+    const { x, y, z } = this.target;
+
+    const blockId = this.world.getBlock(x, y, z);
+
+    if (blockId === BLOCK.AIR.id || blockId == null) {
+        return;
+    }
+
+    this.world.removeBlock(x, y, z);
+
+    // Ajouter le bloc récupéré dans l'inventaire
+    this.inventory.addItem(blockId, 1);
+
+    this.clearTarget();
+}
 
     // ==========================================
     // PLACER
     // ==========================================
 
-    placeBlock() {
-
-        if (!this.target) {
-
-            return;
-
-        }
-
-if (
-    !this.player.controls.isLocked
-) {
-    return;
-}
-        const x =
-            this.target.x +
-            Math.round(
-                this.target.normal.x
-            );
-
-
-        const y =
-            this.target.y +
-            Math.round(
-                this.target.normal.y
-            );
-
-
-        const z =
-            this.target.z +
-            Math.round(
-                this.target.normal.z
-            );
-
-
-const blockId =
-    this.hotbar.getSelectedBlock();
-
-
-if (blockId === null) {
-    return;
-}
-
-
-this.world.addBlock(
-    x,
-    y,
-    z,
-    blockId
-);
-
-
-        this.clearTarget();
-
+placeBlock() {
+    if (!this.target || !this.player.controls.isLocked) {
+        return;
     }
+
+    const x = this.target.x +
+        Math.round(this.target.normal.x);
+
+    const y = this.target.y +
+        Math.round(this.target.normal.y);
+
+    const z = this.target.z +
+        Math.round(this.target.normal.z);
+
+    const blockId = this.hotbar.getSelectedBlock();
+
+    if (blockId == null) return;
+
+    // Vérifier le stock
+    if (this.inventory.getItemCount(blockId) <= 0) {
+        return;
+    }
+
+    // Vérifier que la position est vide
+    if (this.world.getBlock(x, y, z) !== BLOCK.AIR.id) {
+        return;
+    }
+
+    // Placer le bloc
+    this.world.addBlock(x, y, z, blockId);
+
+    // Consommer un bloc
+    this.inventory.removeItem(blockId, 1);
+
+    this.clearTarget();
+}
+
+
 
 }

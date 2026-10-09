@@ -583,3 +583,19 @@ canvas {
     font-size: 28px;
     color: white;
 }
+
+.hotbar-slot,
+.inventory-slot {
+    position: relative;
+}
+
+.item-count {
+    position: absolute;
+    right: 3px;
+    bottom: 2px;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    text-shadow: 2px 2px 2px black;
+    pointer-events: none;
+}

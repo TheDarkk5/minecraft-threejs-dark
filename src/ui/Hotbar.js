@@ -191,7 +191,7 @@ export class Hotbar {
                 "";
 
         }
-
+        this.updateQuantities();
     }
 
 
