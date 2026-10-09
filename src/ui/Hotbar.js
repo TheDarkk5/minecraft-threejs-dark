@@ -27,7 +27,10 @@ export class Hotbar {
                 blockId: BLOCK.OAK_LOG.id
             },
 
-            null,
+            {
+                name: "Planches de bois",
+                blockId: BLOCK.OAK_PLANKS.id
+            },
             null,
             null,
             null,
