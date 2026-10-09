@@ -42,7 +42,7 @@ export class Hotbar {
         const item = this.storage?.slots[this.selectedSlot];
 
         this.blockName.textContent = item
-            ? `Bloc ${item.blockId}`
+            ? `Bloc ${item.blockName}`
             : "";
     }
 }
