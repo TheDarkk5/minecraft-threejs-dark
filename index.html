@@ -10,6 +10,7 @@
     >
 
     <title>Minecraft Three.js</title>
+    <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
@@ -121,45 +122,7 @@
 
     <div class="inventory-window">
 
-        <div class="inventory-title">
-            Inventaire
-        </div>
-
-        <div id="inventory-grid">
-
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-            <div class="inventory-slot"></div>
-
-        </div>
-
-        <div id="crafting">
+<div id="crafting">
     <h3>Fabrication</h3>
 
     <div class="crafting-container">
@@ -174,7 +137,71 @@
 
         <div id="craft-result" class="craft-slot"></div>
     </div>
+</div>
+
+        <div class="inventory-title">
+            Inventaire
         </div>
+
+        <div id="inventory-grid">
+
+            <div class="inventory-slot" data-block="grass">
+                <img src="/textures/grass_top.png">
+                <span>Herbe</span>
+            </div>
+
+            <div class="inventory-slot" data-block="dirt">
+                <img src="/textures/dirt.png">
+                <span>Terre</span>
+            </div>
+
+            <div class="inventory-slot" data-block="stone">
+                <img src="/textures/stone.png">
+                <span>Pierre</span>
+            </div>
+
+            <!-- Cases vides -->
+
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+            <div class="inventory-slot"></div>
+
+        </div>
+
+<div id="inventory-hotbar" aria-label="Barre rapide de l’inventaire">
+    <div class="inventory-hotbar-slot" data-hotbar-slot="0"></div>
+    <div class="inventory-hotbar-slot" data-hotbar-slot="1"></div>
+    <div class="inventory-hotbar-slot" data-hotbar-slot="2"></div>
+    <div class="inventory-hotbar-slot" data-hotbar-slot="3"></div>
+    <div class="inventory-hotbar-slot" data-hotbar-slot="4"></div>
+    <div class="inventory-hotbar-slot" data-hotbar-slot="5"></div>
+    <div class="inventory-hotbar-slot" data-hotbar-slot="6"></div>
+    <div class="inventory-hotbar-slot" data-hotbar-slot="7"></div>
+    <div class="inventory-hotbar-slot" data-hotbar-slot="8"></div>
+</div>
 
         <div class="inventory-help">
             E pour fermer
