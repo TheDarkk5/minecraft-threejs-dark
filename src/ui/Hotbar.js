@@ -1,3 +1,5 @@
+import { BLOCK } from "../blocks/BlockTypes.js";
+
 export class Hotbar {
     constructor() {
         this.selectedSlot = 0;
@@ -42,7 +44,7 @@ export class Hotbar {
         const item = this.storage?.slots[this.selectedSlot];
 
         this.blockName.textContent = item
-            ? `Bloc ${item.blockName}`
+            ? Object.values(BLOCK).find(block => block.id === item.blockId)?.name ?? `Bloc ${item.blockId}`
             : "";
     }
 }
