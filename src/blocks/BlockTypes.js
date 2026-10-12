@@ -29,15 +29,15 @@ export const BLOCK = {
 
     OAK_LOG: {
         id: 4,
-        name: "Bois",
+        name: "Buche de chêne",
         material: "OAK_LOG",
         solid: true
     },
  
-        OAK_PLANKS: {
+    OAK_PLANKS: {
         id: 5,
-        name: "Planches de bois",
+        name: "Planches de Ccêne",
         material: "OAK_PLANKS",
         solid: true
-    }
+    },
 };
