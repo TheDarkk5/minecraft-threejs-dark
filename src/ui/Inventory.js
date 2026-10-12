@@ -15,6 +15,8 @@ export class Inventory {
 
         this.element = document.getElementById("inventory");
         this.slots = document.querySelectorAll(".inventory-slot");
+        this.inventoryHotbar = document.querySelectorAll(".inventory-hotbar-slot"
+);
         this.craftSlots = document.querySelectorAll(
             ".craft-slot[data-craft]"
         );
@@ -112,6 +114,19 @@ if (!this.returnCraftItems()) {
                 event.preventDefault();
                 this.handleSlot(index, event.button);
             });
+
+        this.inventoryHotbar.forEach((element, index) => {
+    element.addEventListener("mousedown", event => {
+        if (event.button !== 0 && event.button !== 2) return;
+
+        event.preventDefault();
+        this.handleSlot(index, event.button);
+    });
+
+    element.addEventListener("contextmenu", event => {
+        event.preventDefault();
+    });
+});
         });
     }
 
@@ -310,6 +325,10 @@ renderItem(element, item) {
             this.isOpen && this.cursorItem ? "block" : "none";
 
         this.hotbar.updateUI();
+
+        this.inventoryHotbar.forEach((element, index) => {
+    this.renderItem(element, this.storage.slots[index]);
+});
     }
    returnCraftItems() {
     for (let i = 0; i < this.craftGrid.length; i++) {
